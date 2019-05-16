@@ -1,5 +1,8 @@
-//
-// Created by User on 09.05.2019.
-//
+#include "catch.hpp"a
+#include "../class/Explore.cpp"
 
-#include "ecploreTest.h"
+TEST_CASE("Explore testing", "explore"){
+Explore news("Sprzedam Opla", "5 letni, za 10 zl");
+REQUIRE(news.getTitle() == "Sprzedam Opla" );
+REQUIRE(news.getText() == "5 letni, za 10 zl");
+}
