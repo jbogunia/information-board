@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-function Input({ data, errors, name, ...rest }) {
-    const value = data[ name ];
-    const error = errors[ name ];
+function Input({data, errors, name, ...rest}) {
+    const value = data[name];
+    const error = errors[name];
 
     return (
         <div className='input-wrapper'>

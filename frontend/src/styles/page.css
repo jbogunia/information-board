@@ -3,7 +3,6 @@
     margin: 0 auto;
     padding: 1em;
 }
-
 header {
     display: flex;
     flex-wrap: wrap;
@@ -13,23 +12,19 @@ header {
     font-size: 1.2em;
     padding-bottom: 2em;
 }
-
 .logo {
     text-shadow: 1px 2px 3px #7c7c7c;
     font-size: 2em;
     margin-right: auto;
 }
-
 .nav-clickable {
     cursor: pointer;
     margin-left: 1em;
     text-shadow: 1px 1px 1px #7c7c7c;
 }
-
 .nav-clickable:hover {
     text-decoration: underline;
 }
-
 @media only screen and (max-width: 600px) {
     .logo {
         width: 100%;

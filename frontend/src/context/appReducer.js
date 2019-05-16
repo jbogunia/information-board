@@ -1,17 +1,17 @@
-import { SET_ADVERTS } from './actions/setAdverts';
-import { ADD_ADVERT } from './actions/addAdvert';
-import { UPDATE_ADVERT } from './actions/updateAdvert';
-import { DELETE_ADVERT } from './actions/deleteAdvert';
-import { OPEN_ADD_ADVERT_MODAL } from './actions/openAddAdvertModal';
-import { OPEN_UPDATE_ADVERT_MODAL } from './actions/openUpdateAdvertModal';
-import { OPEN_DELETE_ADVERT_MODAL } from './actions/openDeleteAdvertModal';
-import { CLOSE_ADD_ADVERT_MODAL } from './actions/closeAddAdvertModal';
-import { CLOSE_UPDATE_ADVERT_MODAL } from './actions/closeUpdateAdvertModal';
-import { CLOSE_DELETE_ADVERT_MODAL } from './actions/closeDeleteAdvertModal';
+import {SET_ADVERTS} from './actions/setAdverts';
+import {ADD_ADVERT} from './actions/addAdvert';
+import {UPDATE_ADVERT} from './actions/updateAdvert';
+import {DELETE_ADVERT} from './actions/deleteAdvert';
+import {OPEN_ADD_ADVERT_MODAL} from './actions/openAddAdvertModal';
+import {OPEN_UPDATE_ADVERT_MODAL} from './actions/openUpdateAdvertModal';
+import {OPEN_DELETE_ADVERT_MODAL} from './actions/openDeleteAdvertModal';
+import {CLOSE_ADD_ADVERT_MODAL} from './actions/closeAddAdvertModal';
+import {CLOSE_UPDATE_ADVERT_MODAL} from './actions/closeUpdateAdvertModal';
+import {CLOSE_DELETE_ADVERT_MODAL} from './actions/closeDeleteAdvertModal';
 
 
 export function appReducer(state, action) {
-    console.debug('appReducer', { state, action });
+    console.debug('appReducer', {state, action});
 
     switch (action.type) {
         case SET_ADVERTS:
@@ -23,13 +23,13 @@ export function appReducer(state, action) {
         case ADD_ADVERT:
             return {
                 ...state,
-                adverts: [ action.advert, ...state.adverts ],
+                adverts: [action.advert, ...state.adverts],
                 addAdvertModalOpen: false,
             };
 
         case UPDATE_ADVERT:
-            const adverts = [ ...state.adverts ];
-            adverts[ adverts.findIndex(a => a.id === action.advert.id) ] = action.advert;
+            const adverts = [...state.adverts];
+            adverts[adverts.findIndex(a => a.id === action.advert.id)] = action.advert;
             return {
                 ...state,
                 adverts: adverts,

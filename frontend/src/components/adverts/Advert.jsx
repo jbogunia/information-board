@@ -2,18 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ActionContainer from '../common/ActionContainer';
 import Button from '../common/Button';
-import { openUpdateAdvertModal } from '../../context/actions/openUpdateAdvertModal';
-import { openDeleteAdvertModal } from '../../context/actions/openDeleteAdvertModal';
+import {openUpdateAdvertModal} from '../../context/actions/openUpdateAdvertModal';
+import {openDeleteAdvertModal} from '../../context/actions/openDeleteAdvertModal';
 
 
-function Advert({ advert, dispatch }) {
-    const [ expanded, setExpanded ] = React.useState(false);
+function Advert({advert, dispatch}) {
+    const [expanded, setExpanded] = React.useState(false);
 
     const handleToggleAdvert = React.useCallback(
         () => {
             setExpanded(prevExpanded => !prevExpanded);
         },
-        [ setExpanded ],
+        [setExpanded],
     );
 
     const handleDeleteButtonClick = React.useCallback(
@@ -21,7 +21,7 @@ function Advert({ advert, dispatch }) {
             e.stopPropagation();
             dispatch(openDeleteAdvertModal(advert));
         },
-        [ dispatch, advert ],
+        [dispatch, advert],
     );
 
     const handleModifyButtonClick = React.useCallback(
@@ -29,7 +29,7 @@ function Advert({ advert, dispatch }) {
             e.stopPropagation();
             dispatch(openUpdateAdvertModal(advert));
         },
-        [ dispatch, advert ],
+        [dispatch, advert],
     );
 
     return (
@@ -45,8 +45,8 @@ function Advert({ advert, dispatch }) {
                 {
                     expanded && (
                         <ActionContainer>
-                            <Button text='Delete' onClick={handleDeleteButtonClick} />
-                            <Button text='Modify' onClick={handleModifyButtonClick} />
+                            <Button text='Delete' onClick={handleDeleteButtonClick}/>
+                            <Button text='Modify' onClick={handleModifyButtonClick}/>
                         </ActionContainer>
                     )
                 }

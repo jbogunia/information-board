@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getAdverts } from '../services/advertService';
-import { appReducer } from './appReducer';
-import { setAdverts } from './actions/setAdverts';
+import {getAdverts} from '../services/advertService';
+import {appReducer} from './appReducer';
+import {setAdverts} from './actions/setAdverts';
 
 
 const defaultContext = {
@@ -15,19 +15,19 @@ const defaultContext = {
 
 export const AppContext = React.createContext(defaultContext);
 
-function AppContextProvider({ children }) {
-    const [ state, dispatch ] = React.useReducer(appReducer, defaultContext);
+function AppContextProvider({children}) {
+    const [state, dispatch] = React.useReducer(appReducer, defaultContext);
 
     React.useEffect(
         () => {
             async function fetchData() {
                 try {
-                    const { data: adverts } = await getAdverts();
+                    const {data: adverts} = await getAdverts();
                     console.log('%cAdverts successfully fetched.', 'color: green; font-weight: bold;', adverts);
                     dispatch(setAdverts(adverts));
                 } catch (e) {
                     alert('Fetching adverts error!');
-                    console.error(e);
+                    console.error(e.message);
                 }
             }
 

@@ -3,11 +3,9 @@
     align-items: flex-end;
     justify-content: flex-end;
 }
-
 .action-container > * {
     margin-left: 1em;
 }
-
 .input {
     border: 1px solid #929292;
     border-radius: 3px;
@@ -15,37 +13,30 @@
     font-family: Lato, sans-serif;
     font-size: 0.9em;
 }
-
 textarea.input {
     resize: vertical;
     height: unset;
 }
-
 .advert-form {
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 1em;
 }
-
 .advert-form h1 {
     font-weight: 400;
     text-shadow: 1px 1px 2px #7c7c7c;
 }
-
 .input-wrapper {
     display: flex;
     flex-direction: column;
 }
-
 .input-wrapper .with-error {
     border: 1px solid #ff1e23;
 }
-
 .input-wrapper .input-error {
     padding: 0.3em 0.6em;
     color: #ff1e23;
 }
-
 .advert-form.loading {
     opacity: 0.5;
     user-select: none;
