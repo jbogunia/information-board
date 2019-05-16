@@ -7,8 +7,6 @@
     0 - advertisment existed and was deleted succesfully
     1 - advertisment existed and was not deleted succesfully
     2 - advertisment with this ID not existed
-    3 - advertisment
-
 */
 
 
