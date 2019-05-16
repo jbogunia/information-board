@@ -14,53 +14,53 @@ void setup()
 {
 
   Serial.begin(115200);
-  Serial.println();
+  Serial.print();
 
   WiFi.disconnect(true);
   WiFi.mode(WIFI_AP);
 
   Serial.print("Setting soft-AP configuration ... ");
-  Serial.println(WiFi.softAPConfig(localIp, gateway, subnet) ? "Ready" : "Failed!");
+  Serial.print(WiFi.softAPConfig(localIp, gateway, subnet) ? "Ready\n" : "Failed!\n");
 
   Serial.print("Setting soft-AP ... ");
-  Serial.println(WiFi.softAP("teest") ? "Ready" : "Failed!");
+  Serial.print(WiFi.softAP("teest") ? "Ready\n" : "Failed!\n");
 
   Serial.print("Soft-AP IP address = ");
-  Serial.println(WiFi.softAPIP());
+  Serial.print(WiFi.softAPIP());
 
   // Initialize SPIFFS
   if (!SPIFFS.begin())
   {
-    Serial.println("An Error has occurred while mounting SPIFFS");
+    Serial.print("An Error has occurred while mounting SPIFFS\n");
     return;
   }
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html");
-    Serial.println("Index.html Request");
+    Serial.print("Index.html Request\n");
   });
   server.on("/posts", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/adverts.json", "application/json");
-    Serial.println("Adverts Request");
+    Serial.print("Adverts Request\n");
   });
   server.on("/main.css", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/main.css");
-    Serial.printn("main.css Request");
+    Serial.print("main.css Request\n");
   });
   server.on("/resources.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/resources.js");
-    Serial.println("resources.js Request");
+    Serial.print("resources.js Request\n");
   });
   server.on("/main.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/main.js");
-    Serial.println("main.js Request");
+    Serial.print("main.js Request\n");
   });
   server.on("/information", HTTP_PUT, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html");
-    Serial.println("Information add request");
+    Serial.print("Information add request\n");
   });
   server.on("/information", HTTP_DELETE, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html");
-    Serial.println("Information remove request");
+    Serial.print("Information remove request\n");
   });
   server.begin();
 }
