@@ -1,0 +1,34 @@
+.modal-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    background-color: white;
+    width: 100%;
+    max-width: 600px;
+    margin: 3em;
+    padding: 2em;
+    border-radius: 6px;
+    box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+@media only screen and (max-width: 600px) {
+    .modal {
+        margin: 1em;
+        padding: 1em;
+    }
+}
