@@ -35,7 +35,27 @@ void setup() {
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
     request->send(SPIFFS, "/index.html");
-    Serial.println("Information list request");
+    Serial.println("Index.html Request");
+  });
+
+  server.on("/posts", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/adverts.json", "application/json");
+    Serial.println("Adverts Request");
+  });
+
+  server.on("/main.css", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/main.css");
+    Serial.println("main.css Request");
+  });
+
+  server.on("/resources.js", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/resources.js");
+    Serial.println("resources.js Request");
+  });
+  
+  server.on("/main.js", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/main.js");
+    Serial.println("main.js Request");
   });
 
   server.on("/information", HTTP_PUT, [](AsyncWebServerRequest * request) {
