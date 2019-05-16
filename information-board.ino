@@ -10,7 +10,8 @@ IPAddress localIp(192, 168, 1, 1);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
-void setup() {
+void setup()
+{
 
   Serial.begin(115200);
   Serial.println();
@@ -28,50 +29,43 @@ void setup() {
   Serial.println(WiFi.softAPIP());
 
   // Initialize SPIFFS
-  if (!SPIFFS.begin()) {
+  if (!SPIFFS.begin())
+  {
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
-
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html");
     Serial.println("Index.html Request");
   });
-
-  server.on("/posts", HTTP_GET, [](AsyncWebServerRequest * request) {
+  server.on("/posts", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/adverts.json", "application/json");
     Serial.println("Adverts Request");
   });
-
-  server.on("/main.css", HTTP_GET, [](AsyncWebServerRequest * request) {
+  server.on("/main.css", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/main.css");
-    Serial.println("main.css Request");
+    Serial.printn("main.css Request");
   });
-
-  server.on("/resources.js", HTTP_GET, [](AsyncWebServerRequest * request) {
+  server.on("/resources.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/resources.js");
     Serial.println("resources.js Request");
   });
-  
-  server.on("/main.js", HTTP_GET, [](AsyncWebServerRequest * request) {
+  server.on("/main.js", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/main.js");
     Serial.println("main.js Request");
   });
-
-  server.on("/information", HTTP_PUT, [](AsyncWebServerRequest * request) {
+  server.on("/information", HTTP_PUT, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html");
     Serial.println("Information add request");
   });
-
-  server.on("/information", HTTP_DELETE, [](AsyncWebServerRequest * request) {
+  server.on("/information", HTTP_DELETE, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/index.html");
     Serial.println("Information remove request");
   });
-
   server.begin();
 }
 
 // the loop function runs over and over again forever
-void loop() {
-
+void loop()
+{
 }

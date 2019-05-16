@@ -1,20 +1,23 @@
 #include <ArduinoJson.h>
 #include "FS.h"
 
-class FileAdapter {
+class FileAdapter
+{
 
 private:
   JsonObject adverts;
-
 };
 
-void FileAdapter::FileAdapter () {
-    SPIFFS.begin();
+void FileAdapter::FileAdapter()
+{
+  SPIFFS.begin();
 };
 
-bool FileAdapter::loadAdverts() {
+bool FileAdapter::loadAdverts()
+{
   File adverts = SPIFFS.open("/adverts.json", "r");
-  if (!adverts) {
+  if (!adverts)
+  {
     return false;
   }
 
@@ -24,9 +27,10 @@ bool FileAdapter::loadAdverts() {
   adverts.readBytes(buf, size);
 
   StaticJsonBuffer<5000> jsonBuffer;
-  JsonObject& json = jsonBuffer.parseObject(buf);
+  JsonObject &json = jsonBuffer.parseObject(buf);
 
-  if (!json.success()) {
+  if (!json.success())
+  {
     delete buf;
     return false;
   }
@@ -38,18 +42,19 @@ bool FileAdapter::loadAdverts() {
   return true;
 }
 
-bool FileAdapter::saveAdvert(JsonObject newAdvert) {
+bool FileAdapter::saveAdvert(JsonObject newAdvert)
+{
   StaticJsonBuffer<500> jsonBuffer;
-  JsonObject& json = jsonBuffer.createObject();
+  JsonObject &json = jsonBuffer.createObject();
   json["adverts"] = this->adverts;
 
   File configFile = SPIFFS.open("/adverts.json", "w");
-  if (!configFile) {
+  if (!configFile)
+  {
     return false;
   }
 
   json.printTo(configFile);
   configFile.close();
   return true;
-
 }
