@@ -1,35 +1,40 @@
-#include <iostream>
 #include <map>
 #include <vector>
+#include "Advert.cpp"
+
+using namespace std;
 
 
 class AdvertRepository {
-    std::map<int, std::string> adverts = {
-            {0, "Advert 0"},
-            {1, "Advert 1"},
-            {2, "Advert 2"},
-            {3, "Advert 3"},
+    map<string, Advert*> adverts = {
+            {"0", new Advert("0", "Title 0", "Body", "Pass")},
+            {"1", new Advert("1", "Title 1", "Body", "Pass")},
+            {"2", new Advert("2", "Title 2", "Body", "Pass")},
+            {"3", new Advert("3", "Title 3", "Body", "Pass")},
     };
 
 public:
-    std::string find_advert(int id_advert) {
-        std::cout << "Find advert [" << id_advert << "]" << std::endl;
 
-        std::map<int, std::string>::iterator it;
+    // just for use in tests?
+    Advert* find_advert(string id_advert) {
+        cout << "Find advert [" << id_advert << "]" << endl;
+
+        map<string, Advert*>::iterator it;
         it = adverts.find(id_advert);
+
         if (it != adverts.end()) {
             return adverts[id_advert];
         } else {
-            std::cout << "Advert not found!" << std::endl;
+            cout << "Advert not found!" << endl;
             // place for Null object Pattern?
-            return "null";
+            return nullptr;
         }
     }
 
-    std::vector<std::string> find_all_adverts() {
-        std::vector<std::string> values(adverts.size());
-        for (const auto& it : adverts) {
-            values.push_back(it.second);
+    vector<Advert*> find_all_adverts() {
+        vector<Advert*> values;
+        for (auto const& advert_entry: adverts) {
+            values.push_back(advert_entry.second);
         }
         return values;
     }
@@ -38,29 +43,31 @@ public:
         return adverts.size();
     }
 
-    void add_advert(int id_advert, std::string advert) {
-        std::cout << "Add advert [" << id_advert << ", " << advert << "]" << std::endl;
+    void add_advert(string id_advert, Advert *advert) {
+        cout << "Add advert [" << id_advert << ", " << advert->to_string() << "]" << endl;
         if (adverts.count(id_advert) == 0) {
             adverts[id_advert] = advert;
         } else {
-            std::cout << "Advert with given id exists!" << std::endl;
+            cout << "Advert with given id exists!" << endl;
         }
     }
 
-    void update_advert(int id_advert, std::string new_advert) {
-        std::cout << "Update advert [" << id_advert << ", " << new_advert << "]" << std::endl;
+    void update_advert(string id_advert, Advert *new_advert) {
+        cout << "Update advert [" << id_advert << ", " << new_advert << "]" << endl;
         adverts[id_advert] = new_advert;
     }
 
-    void remove_advert(int id_advert) {
-        std::cout << "Remove advert [" << id_advert << "]" << std::endl;
+    void remove_advert(string id_advert) {
+        cout << "Remove advert [" << id_advert << "]" << endl;
         adverts.erase(id_advert);
     }
 
+
+    // just for develop
     void print_adverts() {
-        std::cout << "Adverts [" << adverts.size() << "]:" << std::endl;
-        for (const auto& it : adverts) {
-            std::cout << '\t' << it.first << " -> " << it.second << std::endl;
+        cout << "Adverts [" << adverts.size() << "]:" << endl;
+        for (auto const& advert_entry: adverts) {
+            cout << '\t' << advert_entry.first << " -> " << advert_entry.second->to_string() << endl;
         }
     }
 };
