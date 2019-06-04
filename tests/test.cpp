@@ -1,10 +1,26 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch.hpp"
-#include "../class/SampleClass.cpp"
+#include "../class/AdvertRepository.cpp"
 
-TEST_CASE("TestSampleClass", "[stest_sample_class]")
+
+// https://github.com/catchorg/Catch2/blob/master/docs/tutorial.md#bdd-style
+TEST_CASE("AdvertRepository", "[repository]")
 {
-    SampleClass obj;
-    obj.set_values(3, 4);
-    REQUIRE(obj.area() == 12);
+    AdvertRepository advertRepository;
+
+    SECTION("init repository with initial 4 adverts") {
+        REQUIRE(advertRepository.get_adverts_count() == 4);
+    }
+
+    SECTION("add new advert with id 4") {
+        advertRepository.add_advert(4, "Advert 4");
+        REQUIRE(advertRepository.get_adverts_count() == 5);
+        REQUIRE(advertRepository.find_advert(4) == "Advert 4");
+    }
+
+    SECTION("remove advert with id 4") {
+        advertRepository.remove_advert(4);
+        REQUIRE(advertRepository.get_adverts_count() == 4);
+        REQUIRE(advertRepository.find_advert(4) == "null");
+    }
 }
