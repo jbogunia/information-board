@@ -6,12 +6,12 @@
 using namespace std;
 
 
-class AdvertRepository {
+class Repository {
     int id_generator = -1;
     map<string, Advert*> adverts;
 
 public:
-    AdvertRepository() {
+    Repository() {
         // initialize advert repository with some adverts
         string id = get_new_id();
         adverts[id] = new Advert(id, "Title 0", "Body", "Pass");
@@ -40,7 +40,7 @@ public:
      *      1 -> success
      *      -1 -> id taken
      */
-    int add_advert(string id_advert, Advert *advert) {
+    int add(string id_advert, Advert *advert) {
         if (adverts.count(id_advert) == 0) {
             adverts[id_advert] = advert;
             return 1;
@@ -58,8 +58,8 @@ public:
      *      -1 -> advert not found, no advert under given id
      *      -2 -> no authorized, when password from new_advert is not equal to saved one
      */
-    int update_advert(string id_advert, Advert *new_advert) {
-        Advert *advert_to_update = find_advert(id_advert);
+    int update(string id_advert, Advert *new_advert) {
+        Advert *advert_to_update = find_by_id(id_advert);
         if (advert_to_update != nullptr) {
             if (advert_to_update->getPassword() == new_advert->getPassword()) {
                 adverts[id_advert] = new_advert;
@@ -75,11 +75,24 @@ public:
     /**
      * Remove advert saved under given id
      * @param id_advert - advert id
-     * @return 1 -> success
+     * @param password - advert password
+     * @return
+     *      1 -> success
+     *      -1 -> advert not found, no advert under given id
+     *      -2 -> no authorized, when password from advert is not equal to saved one
      */
-    int remove_advert(string id_advert) {
-        adverts.erase(id_advert);
-        return 1;
+    int remove(string id_advert, string password) {
+        Advert *advert_to_delete = find_by_id(id_advert);
+        if (advert_to_delete != nullptr) {
+            if (advert_to_delete->getPassword() == password) {
+                adverts.erase(id_advert);
+                return 1;
+            } else {
+                return -2;
+            }
+        } else {
+            return -1;
+        }
     }
 
     /**
@@ -87,7 +100,7 @@ public:
      * @param id_advert - advert id
      * @return saved advert or nullptr when advert is not found
      */
-    Advert* find_advert(string id_advert) {
+    Advert* find_by_id(string id_advert) {
         map<string, Advert*>::iterator it;
         it = adverts.find(id_advert);
 
@@ -102,7 +115,7 @@ public:
      * Find all saved adverts
      * @return vector of saved adverts
      */
-    vector<Advert*> find_all_adverts() {
+    vector<Advert*> find_all() {
         vector<Advert*> values;
         for (auto const& advert_entry: adverts) {
             values.push_back(advert_entry.second);

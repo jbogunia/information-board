@@ -24,4 +24,5 @@ public:
     const string &getPassword() const {
         return password;
     }
+
 };
