@@ -1,36 +1,107 @@
 #include <map>
 #include <vector>
 #include "Advert.cpp"
+#include "ErrorMessage.cpp"
 
 using namespace std;
 
 
 class AdvertRepository {
-    map<string, Advert*> adverts = {
-            {"0", new Advert("0", "Title 0", "Body", "Pass")},
-            {"1", new Advert("1", "Title 1", "Body", "Pass")},
-            {"2", new Advert("2", "Title 2", "Body", "Pass")},
-            {"3", new Advert("3", "Title 3", "Body", "Pass")},
-    };
+    int id_generator = -1;
+    map<string, Advert*> adverts;
 
 public:
+    AdvertRepository() {
+        // initialize advert repository with some adverts
+        string id = get_new_id();
+        adverts[id] = new Advert(id, "Title 0", "Body", "Pass");
+        id = get_new_id();
+        adverts[id] = new Advert(id, "Title 1", "Body", "Pass");
+        id = get_new_id();
+        adverts[id] = new Advert(id, "Title 2", "Body", "Pass");
+        id = get_new_id();
+        adverts[id] = new Advert(id, "Title 3", "Body", "Pass");
+    }
 
-    // just for use in tests?
+    /**
+     * Generate new unique advert id
+     * @return advert id
+     */
+    string get_new_id() {
+        id_generator++;
+        return ::to_string(id_generator);
+    }
+
+    /**
+     * Save passed advert in memory
+     * @param id_advert - unique advert id
+     * @param advert - new advert
+     * @return
+     *      1 -> success
+     *      -1 -> id taken
+     */
+    int add_advert(string id_advert, Advert *advert) {
+        if (adverts.count(id_advert) == 0) {
+            adverts[id_advert] = advert;
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * Update advert saved under given id
+     * @param id_advert - advert id
+     * @param new_advert - updated advert
+     * @return
+     *      1 -> success
+     *      -1 -> advert not found, no advert under given id
+     *      -2 -> no authorized, when password from new_advert is not equal to saved one
+     */
+    int update_advert(string id_advert, Advert *new_advert) {
+        Advert *advert_to_update = find_advert(id_advert);
+        if (advert_to_update != nullptr) {
+            if (advert_to_update->getPassword() == new_advert->getPassword()) {
+                adverts[id_advert] = new_advert;
+                return 1;
+            } else {
+                return -2;
+            }
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * Remove advert saved under given id
+     * @param id_advert - advert id
+     * @return 1 -> success
+     */
+    int remove_advert(string id_advert) {
+        adverts.erase(id_advert);
+        return 1;
+    }
+
+    /**
+     * Find advert saved under given id
+     * @param id_advert - advert id
+     * @return saved advert or nullptr when advert is not found
+     */
     Advert* find_advert(string id_advert) {
-        cout << "Find advert [" << id_advert << "]" << endl;
-
         map<string, Advert*>::iterator it;
         it = adverts.find(id_advert);
 
         if (it != adverts.end()) {
-            return adverts[id_advert];
+            return it -> second;
         } else {
-            cout << "Advert not found!" << endl;
-            // place for Null object Pattern?
             return nullptr;
         }
     }
 
+    /**
+     * Find all saved adverts
+     * @return vector of saved adverts
+     */
     vector<Advert*> find_all_adverts() {
         vector<Advert*> values;
         for (auto const& advert_entry: adverts) {
@@ -39,35 +110,11 @@ public:
         return values;
     }
 
-    int get_adverts_count() {
-        return adverts.size();
-    }
-
-    void add_advert(string id_advert, Advert *advert) {
-        cout << "Add advert [" << id_advert << ", " << advert->to_string() << "]" << endl;
-        if (adverts.count(id_advert) == 0) {
-            adverts[id_advert] = advert;
-        } else {
-            cout << "Advert with given id exists!" << endl;
-        }
-    }
-
-    void update_advert(string id_advert, Advert *new_advert) {
-        cout << "Update advert [" << id_advert << ", " << new_advert << "]" << endl;
-        adverts[id_advert] = new_advert;
-    }
-
-    void remove_advert(string id_advert) {
-        cout << "Remove advert [" << id_advert << "]" << endl;
-        adverts.erase(id_advert);
-    }
-
-
     // just for develop
     void print_adverts() {
-        cout << "Adverts [" << adverts.size() << "]:" << endl;
+        cout << endl<< "Adverts [" << adverts.size() << "]:" << endl;
         for (auto const& advert_entry: adverts) {
-            cout << '\t' << advert_entry.first << " -> " << advert_entry.second->to_string() << endl;
+            cout << '\t' << advert_entry.first << " -> " << advert_entry.second->to_json() << endl;
         }
     }
 };

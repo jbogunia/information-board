@@ -16,11 +16,12 @@ public:
         password = _password;
     };
 
-    string to_string() {
-        return "Advert [id=" + id + ", title='" + title + "', body='" + body + "', password='" + password + "']";
+    string to_json() {
+//        return "{\"id\":\"" + id + "\",\"title\":\"" + title + "\",\"body\":\"" + body + "\"}";
+        return "{\"id\":\"" + id + "\",\"title\":\"" + title + "\",\"body\":\"" + body + "\",\"password:\"" + password + "\"}";
     };
 
-    string to_json() {
-        return "{\"id\":\"" + id + "\",\"title\":\"" + title + "\",\"body\":\"" + body + "\"}";
-    };
+    const string &getPassword() const {
+        return password;
+    }
 };
