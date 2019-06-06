@@ -51,7 +51,7 @@ void setup() {
     Serial.println("main.css Request");
   });
 
-  //Zwraca js idk co to xD (pytać Karola)
+  //Zwraca js
   server.on("/resources.js", HTTP_GET, [](AsyncWebServerRequest * request) {
     request->send(SPIFFS, "/resources.js");
     Serial.println("resources.js Request");
