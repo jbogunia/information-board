@@ -2,8 +2,15 @@
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include "class/FileAdapter.cpp"
 
 AsyncWebServer server(80);
+
+IPAddress localIp(192, 168, 1, 1);
+IPAddress gateway(192, 168, 1, 1);
+IPAddress subnet(255, 255, 255, 0);
+
+FileAdapter fileAdapter = FileAdapter::getInstance();
 
 void setup() {
 
@@ -63,24 +70,39 @@ void setup() {
     Serial.println("main.js Request");
   });
 
-
   //Endpoint umożliwiający dodanie nowego ogłoszenia
   //Wymagane pola: title, body, password (trzeba by zrobić ich validacje, aktualnie tylko sprawdza, czy są w requescie)
   server.on("/advert", HTTP_PUT, [](AsyncWebServerRequest * request) {
-    
+
   });
 
   //Endpoint służący do edycji ogłoszenia
   //Wymagane pola: id,title, body, password (rówież rzydała by się validacja)
   server.on("/advert", HTTP_PATCH, [](AsyncWebServerRequest * request) {
-    
+
   });
 
   //Endpoint służący do usuwania ogłoszenia
   //Wymagane pola: id, password
   server.on("/advert", HTTP_DELETE, [](AsyncWebServerRequest * request) {
-    
+    Serial.println("Avdert remove request");
+    if (request->hasParam("id") && request->hasParam("password")) {
+      int advertId = request->getParam("id")->value().toInt();
+      String advertPassword = request->getParam("password")->value();
+      Serial.print("Removing advert: ");
+      Serial.println(advertId);
+
+      ErrorResponse errorResponse = fileAdapter.removeAdvert(advertId, advertPassword);
+      if (errorResponse.getCode() == 200) {
+        request->send(200, "application/json", errorResponse.getJsonMessage());
+      } else {
+        request->send(errorResponse.getCode(), "application/json", errorResponse.getJsonMessage());
+      }
+    } else {
+      request->send(400, "application/json", "{\"message\" : \"\You need to specyify all request params!\"}" );
+    }
   });
+
   server.begin();
 }
 
