@@ -73,13 +73,67 @@ void setup() {
   //Endpoint umożliwiający dodanie nowego ogłoszenia
   //Wymagane pola: title, body, password (trzeba by zrobić ich validacje, aktualnie tylko sprawdza, czy są w requescie)
   server.on("/advert", HTTP_PUT, [](AsyncWebServerRequest * request) {
+    Serial.println("Advert PUT request");
+    if (request->hasParam("password", true) && request->hasParam("title", true) && request->hasParam("body", true)) {
+      String adertTitle = request->getParam("title", true)->value();
+      String advertBody = request->getParam("body", true)->value();
+      String advertPassword = request->getParam("password", true)->value();
 
+
+      const size_t CAPACITY = JSON_OBJECT_SIZE(100);
+      StaticJsonDocument<CAPACITY> doc;
+
+      JsonObject advert = doc.to<JsonObject>();
+      advert["title"] = adertTitle;
+      advert["body"] = advertBody;
+      advert["password"] = advertPassword;
+
+      ErrorResponse errorResponse = fileAdapter.saveAdvert(advert);
+      if (errorResponse.getCode() == 200) {
+        Serial.println("New advert saved!");
+        AsyncResponseStream *response = request->beginResponseStream("application/json");
+        serializeJson(advert, *response);
+        request->send(response);
+
+      } else {
+        request->send(errorResponse.getCode(), "application/json", errorResponse.getJsonMessage() );
+      }
+    } else {
+      request->send(400, "application/json", "{\"message\" : \"\You need to specyify all request params!\"}" );
+    }
   });
 
   //Endpoint służący do edycji ogłoszenia
   //Wymagane pola: id,title, body, password (rówież rzydała by się validacja)
   server.on("/advert", HTTP_PATCH, [](AsyncWebServerRequest * request) {
+    Serial.println("Advert PATCH request");
+    if (request->hasParam("id") && request->hasParam("password") && request->hasParam("title") && request->hasParam("body")) {
+      int advertId = request->getParam("id")->value().toInt();
+      String advertTitle = request->getParam("title")->value();
+      String advertBody = request->getParam("body")->value();
+      String advertPassword = request->getParam("password")->value();
 
+      ErrorResponse errorResponse = fileAdapter.editAdvert(advertId, advertTitle, advertBody, advertPassword);
+
+      if (errorResponse.getCode() == 200) {
+        Serial.println("Advert edited!");
+        const size_t CAPACITY = JSON_OBJECT_SIZE(100);
+        StaticJsonDocument<CAPACITY> doc;
+
+        JsonObject advert = doc.to<JsonObject>();
+        advert["id"] = advertId;
+        advert["title"] = advertTitle;
+        advert["body"] = advertBody;
+
+        AsyncResponseStream *response = request->beginResponseStream("application/json");
+        serializeJson(advert, *response);
+        request->send(response);
+      } else {
+        request->send(errorResponse.getCode(), "application/json", errorResponse.getJsonMessage());
+      }
+    } else {
+      request->send(400, "application/json", "{\"message\" : \"\You need to specyify all request params!\"}" );
+    }
   });
 
   //Endpoint służący do usuwania ogłoszenia
@@ -110,3 +164,4 @@ void setup() {
 void loop() {
 
 }
+

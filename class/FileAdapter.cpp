@@ -89,11 +89,43 @@ bool FileAdapter::saveAdvertsToJson() {
 }
 
 ErrorResponse FileAdapter::saveAdvert(JsonObject newAdvert) {
+  int id = 0;
+  Serial.print("Adverts count: ");
+  Serial.println(this->advertsArray.size());
+  if(this->advertsArray.size() > 0) {
+    id = (int) this->advertsArray.getElement(this->advertsArray.size()-1)["id"];
+    id++;
+  }
 
+  newAdvert["id"] = id;
+  this->advertsArray.add(newAdvert);
+
+  if(this->saveAdvertsToJson()){
+      ErrorResponse response(200, "Advert saved");
+      return response;
+  } else {
+      ErrorResponse response(500, "Something went wrong  :(");
+      return response;
+  }
 }
 
 int FileAdapter::getAdvertIndex(int advertId) {
-
+  int index=0;
+  Serial.print("Finding ");
+  Serial.print(advertId);
+  Serial.println(" advert");
+  for (JsonObject advert : this->advertsArray) {
+    JsonVariant variant = advert.getMember("id");
+    int id = variant.as<int>();
+      if(id == advertId){
+        Serial.print("Advert found on ");
+        Serial.print(index);
+        Serial.println(" position");
+        return index;
+      }
+      index++;
+  }
+  return -1;
 }
 
 /**
@@ -126,5 +158,27 @@ ErrorResponse FileAdapter::removeAdvert(int id, String advertPassword) {
 }
 
 ErrorResponse FileAdapter::editAdvert(int id, String title, String body, String password) {
-
+  int index = this->getAdvertIndex(id);
+  if(index != -1){
+    Serial.print("Editing advert on ");
+    Serial.print(index);
+    Serial.println(" position in array");
+    JsonVariant variant = this->advertsArray.getElement(index);
+	Serial.println(variant.getMember("password").as<String>());
+	if(variant.getMember("password").as<String>() == password){
+		variant.getMember("title").set(title);
+		variant.getMember("body").set(body);
+		this->saveAdvertsToJson();
+    ErrorResponse response(200, "Advert edited!");
+    return response;
+	} else {
+		Serial.println("Given password does not match");
+    ErrorResponse response(401, "Given password does not match");
+    return response;
+	}
+  } else {
+    Serial.println("Given advert not found :(");
+    ErrorResponse response(400, "Given advert not found :(");
+    return response;
+  }
 }
