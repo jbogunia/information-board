@@ -2,8 +2,15 @@
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include "class/FileAdapter.cpp"
 
 AsyncWebServer server(80);
+
+IPAddress localIp(192, 168, 1, 1);
+IPAddress gateway(192, 168, 1, 1);
+IPAddress subnet(255, 255, 255, 0);
+
+FileAdapter fileAdapter = FileAdapter::getInstance();
 
 void setup() {
 
@@ -63,11 +70,10 @@ void setup() {
     Serial.println("main.js Request");
   });
 
-
   //Endpoint umożliwiający dodanie nowego ogłoszenia
   //Wymagane pola: title, body, password (trzeba by zrobić ich validacje, aktualnie tylko sprawdza, czy są w requescie)
   server.on("/advert", HTTP_PUT, [](AsyncWebServerRequest * request) {
-        Serial.println("Advert PUT request");
+    Serial.println("Advert PUT request");
     if (request->hasParam("password", true) && request->hasParam("title", true) && request->hasParam("body", true)) {
       String adertTitle = request->getParam("title", true)->value();
       String advertBody = request->getParam("body", true)->value();
@@ -148,8 +154,9 @@ void setup() {
       }
     } else {
       request->send(400, "application/json", "{\"message\" : \"\You need to specyify all request params!\"}" );
-
+    }
   });
+
   server.begin();
 }
 
