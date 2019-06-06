@@ -96,6 +96,12 @@ int FileAdapter::getAdvertIndex(int advertId) {
 
 }
 
+/**
+ * Remove advert
+ * @param id - advert id
+ * @param advertPassword - advert password, must match already saved one
+ * @return response object with updated advert or error message
+ */
 ErrorResponse FileAdapter::removeAdvert(int id, String advertPassword) {
     int index = this->getAdvertIndex(id);
     if(index != -1){
