@@ -39,22 +39,28 @@ void setup() {
   //Ten endpoint odpowiada za zwrócenie listy wszystkich ogłoszeń w formacie JSON
   //(wraca z pamięci podręcznej, ale wszystkie ogłoszenia zapisywane/modyfikowane są równiez w pliku adverts.json - dostępne są po restartie urządzenia)
   server.on("/advert", HTTP_GET, [](AsyncWebServerRequest * request) {
-    
+    Serial.println("Adverts GET Request");
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    serializeJson(fileAdapter.advertsArray, *response);
+    request->send(response);
   });
 
   //Zwraca kaskadowy arkusz stylów z pamięci urządzenia
   server.on("/main.css", HTTP_GET, [](AsyncWebServerRequest * request) {
-   
+    request->send(SPIFFS, "/main.css");
+    Serial.println("main.css Request");
   });
 
-  //Zwraca js idk co to xD (pytać Karola)
+  //Zwraca js
   server.on("/resources.js", HTTP_GET, [](AsyncWebServerRequest * request) {
-    
+    request->send(SPIFFS, "/resources.js");
+    Serial.println("resources.js Request");
   });
 
   //Zwraca js, zapewne logika frontendu
   server.on("/main.js", HTTP_GET, [](AsyncWebServerRequest * request) {
-   
+    request->send(SPIFFS, "/main.js");
+    Serial.println("main.js Request");
   });
 
 
